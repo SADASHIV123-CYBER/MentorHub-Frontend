@@ -1,12 +1,15 @@
 import './App.css'
-import Button from './components/Button/Button'
 import React from 'react'
+import Container from './components/Contanier/Container'
+import Navbar from './components/Navbar/Navbar'
 
 function App() {
 
   return (
     <>
-      <Button styleType='primary' text="sign in "/>
+    <Container>
+      <Navbar />
+    </Container>
     </>
   )
 }

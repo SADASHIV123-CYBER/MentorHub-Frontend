@@ -3,6 +3,7 @@ import React from "react";
 
 function Button({ 
   text, 
+  specialText,
   onClickHandler, 
   styleType = "primary", 
   type = "button", 
@@ -17,6 +18,7 @@ function Button({
       className={`${getButtonStyling(disabled ? "disabled" : styleType)} ${className}`}
     >
       {text}
+      <text className="block hover:[transform:translateY(-0.5px)]">{specialText}</text>
     </button>
   );
 }
