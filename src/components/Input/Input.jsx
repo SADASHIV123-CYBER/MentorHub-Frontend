@@ -1,3 +1,5 @@
+import React from "react";
+
 function Input({
   label,
   name,
@@ -11,7 +13,7 @@ function Input({
 }) {
   return (
     <div className="flex flex-col">
-      {label && <label className="mb-1 font-medium text-gray-700">{label}</label>}
+      {label && <label className="mb-1 font-medium text-black font-bold ">{label}</label>}
       <input
         name={name}
         type={type}
@@ -19,7 +21,7 @@ function Input({
         value={value}
         onChange={onChange}
         required={required}
-        className={`w-full border rounded p-2 focus:ring-1 focus:ring-sky-500 ${className}`}
+        className={`w-full border rounded p-2 focus:ring-1 focus:ring-[#2DA58D] ${className}`}
         {...props}
       />
     </div>

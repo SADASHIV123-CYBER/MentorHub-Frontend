@@ -1,6 +1,6 @@
 import React from "react";
 import {  useState, useEffect } from "react";
-import { client } from "../Api/client";
+import { client } from "../api/client";
 import { AuthContext } from "./context";
 
 
@@ -12,7 +12,7 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     const verifyLogin = async () => {
       try {
-        const res = await client.get("/verify"); 
+        const res = await client.get("/verify"); // ✅ cookie will be sent
         if (res.data.success) setUser(res.data.user);
         else setUser(null);
       } catch (err) {

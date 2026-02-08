@@ -18,7 +18,7 @@ function Button({
       className={`${getButtonStyling(disabled ? "disabled" : styleType)} ${className}`}
     >
       {text}
-      <text className="block hover:[transform:translateY(-0.5px)]">{specialText}</text>
+      <p className="block hover:[transform:translateY(-0.5px)]">{specialText}</p>
     </button>
   );
 }

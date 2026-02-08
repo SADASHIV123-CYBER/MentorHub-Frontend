@@ -1,8 +1,19 @@
-import React from "react"
+import React, { useContext } from "react"
 import logo from "../../assets/logo.png"
 import Button from "../Button/Button"
+import { Link } from "react-router-dom"
+import SignIn from "../Auth/SignIn/SignIn"
+// import { ModalContext } from "../../context/context"
+import { useModal } from "../../context/ModalContext"
+
 
 function Navbar() {
+
+    // const {setLoginOpen} = useContext(ModalContext);
+
+    const {openLogin} = useModal()
+
+    
     return (
         <nav className="h-30 p-8 w-full bg-white mt-5  rounded-md flex flex-row justify-between items-center">
             <div className="flex  items-center">
@@ -18,10 +29,13 @@ function Navbar() {
 
             <div className="flex flex-row justify-between w-45">
                 <div>
-                    <Button  styleType="signIn" text={"Sign In"}/>
+
+                    {/* <Link to="/signIn"> <Button  styleType="signIn" text={"Sign In"} onClickHandler={() => setLoginOpen(true)} /> </Link> */}
+
+                    <Button  styleType="signIn" text={"Sign In"} onClickHandler={openLogin} />
                 </div>
                 <div>
-                    <Button styleType="signUp" specialText={"Sign Up"} />
+                    <Button styleType="special-btn" specialText={"Sign Up"}  />
                 </div>
             </div>
         </nav>
