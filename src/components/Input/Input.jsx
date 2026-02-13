@@ -9,11 +9,12 @@ function Input({
   onChange,
   required = false,
   className = "",
+  ref,
   ...props
 }) {
   return (
     <div className="flex flex-col">
-      {label && <label className="mb-1 font-medium text-black font-bold ">{label}</label>}
+      {label && <label className="mb-1 font-medium text-black ">{label}</label>}
       <input
         name={name}
         type={type}
@@ -21,7 +22,8 @@ function Input({
         value={value}
         onChange={onChange}
         required={required}
-        className={`w-full border rounded p-2 focus:ring-1 focus:ring-[#2DA58D] ${className}`}
+        className={`w-full border border-gray-300 rounded-md p-2 transition duration-300 ease-in-out hover:border-green-500  hover:shadow-md ${className}`}
+        ref={ref}
         {...props}
       />
     </div>

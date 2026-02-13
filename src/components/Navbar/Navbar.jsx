@@ -4,14 +4,18 @@ import Button from "../Button/Button"
 import { Link } from "react-router-dom"
 import SignIn from "../Auth/SignIn/SignIn"
 // import { ModalContext } from "../../context/context"
-import { useModal } from "../../context/ModalContext"
+
+import { AuthContext, ModalContext } from "../../context/context"
 
 
 function Navbar() {
 
-    // const {setLoginOpen} = useContext(ModalContext);
 
-    const {openLogin} = useModal()
+
+    const {openLogin, setView} = useContext(ModalContext)
+
+
+    const {user} = useContext(AuthContext)
 
     
     return (
@@ -27,17 +31,23 @@ function Navbar() {
                 <span className=" text-[#5F6B64] cursor-pointer "> About</span>
             </div>
 
-            <div className="flex flex-row justify-between w-45">
+            {user ? <div>hi</div> :  <div className="flex flex-row justify-between w-45">
                 <div>
 
                     {/* <Link to="/signIn"> <Button  styleType="signIn" text={"Sign In"} onClickHandler={() => setLoginOpen(true)} /> </Link> */}
 
-                    <Button  styleType="signIn" text={"Sign In"} onClickHandler={openLogin} />
+                    <Button  styleType="signIn" text={"Sign In"} onClickHandler={() => {
+                        openLogin();
+                        setView('signIn')
+                    }} />
                 </div>
                 <div>
-                    <Button styleType="special-btn" specialText={"Sign Up"}  />
+                    <Button styleType="special-btn" specialText={"Sign Up"} onClickHandler={() => {
+                        openLogin();
+                        setView('signUp')
+                    }}  />
                 </div>
-            </div>
+            </div>}
         </nav>
     )
 }

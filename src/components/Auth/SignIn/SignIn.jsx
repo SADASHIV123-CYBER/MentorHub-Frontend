@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import  { useContext } from "react";
 import { useState } from "react"
 import Input from "../../Input/Input.jsx";
@@ -24,6 +24,14 @@ function SignIn({onSuccess}) {
     //     // setForm({ ...form, [e.target.name]: e.target.value });
     //     e.preventDefault()
     // };
+
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if(inputRef.current) {
+            inputRef.current.focus();
+        }
+    },[])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,7 +66,7 @@ function SignIn({onSuccess}) {
             // const serverMsg = err?.response?.data?.message;
             // if (serverMsg) setError(serverMsg);
             if (err?.response?.status === 401) setError("Unauthorized — invalid credentials or token.");
-            else setError("Invalid email or password. Try again.");
+            else setError("Invalid email or password, Please check and try again.");
             } finally {
             setLoading(false);
             }           
@@ -69,21 +77,23 @@ function SignIn({onSuccess}) {
 
         <div className="bg-white h-120 w-120 p-10 m-auto">
         
-            <div>
-                <h2>MentorHub</h2>
-                <p>Sign in to your account</p>
+            <div className="flex flex-col items-center ">
+                <h2 className="font-bold text-3xl" >Sign in to mentorhub</h2>
+                <p className="text-gray-400 mt-5 ">Welcome back! Please sign in to continue</p>
             </div>
 
-            <form onSubmit={handleSubmit}>
-
-                <div>
+            <form onSubmit={handleSubmit} className="mt-7">
+                <div className="flex flex-col gap-3 p-2">
+                    <div>
                     <Input 
                         label="Email"
                         name="email"
-                        placeholder=""
-                        // value={form.email}
+                        type="email"
+                        placeholder=""                     // value={form.email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="focus:ring-[#2DA58D]"
+                        className={error === 'Invalid email or password, Please check and try again.' ? "border-red-500 hover:border-red-700 " : "" }
+                        ref={inputRef}
+                        required={true}
 
                     />
 
@@ -93,16 +103,26 @@ function SignIn({onSuccess}) {
                     <Input 
                         label="Password"
                         name="password"
+                        type="password"
                         // value={form.password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required={true}
+                        className={error === 'Invalid email or password, Please check and try again.' ? "border-red-500 hover:border-red-700 " : "" }
                     />
                 </div>
 
-                {error && <p> {error} </p> }
+                </div>
+
+                {error && <p className="text-red-400"> {error} </p> }
 
                     <Button text={loading ? "signing in..." : "Sign In" } styleType="special-btn" className="w-full h-12 mt-8 " type="submit" />
 
             </form>
+
+            <div className=" mt-3 justify-center  ">
+                <span className="text-gray-400 ml-20">Don’t have an account?</span> {" "}
+                <span className="text-gray-600" > Sign up</span>
+            </div>
         </div>
         
     )
