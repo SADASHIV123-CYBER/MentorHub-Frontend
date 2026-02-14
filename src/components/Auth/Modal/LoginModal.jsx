@@ -8,7 +8,7 @@ import SignUp from "../SignUp/SignUp";
 
 function LoginModal() {
 
-  const { closeLogin, view } = useContext(ModalContext);
+  const { closeLogin, view, setView } = useContext(ModalContext);
   // const [view, setView] = useState('signIn');
 
 

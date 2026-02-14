@@ -1,144 +1,14 @@
-// import { useState } from "react"
-// import Input from "../../Input/Input"
-// import { client } from "../../../Api/client";
-// import React from "react";
-// import Button from "../../Button/Button";
-
-// function SignUp({onSuccess}) {
-
-//     const [form, setForm] = useState({
-//         fullName: '',
-//         userName: '',
-//         email: '',
-//         password: '',
-//         mobileNumber: '',
-//         profilePicture: ''
-//     });
-
-//     const [error, setError] = useState("");
-//     const [loading, setLoading] = useState(false);
-
-
-// //   const handleChange = (e) => {
-// //     const { name, value, type, files } = e.target;
-// //     // Handle file input separately if needed, for this example we'll assume the Input component handles file logic appropriately
-// //     const newValue = type === 'file' ? files[0] : value;
-// //     setForm(prevForm => ({
-// //       ...prevForm,
-// //       [name]: newValue,
-// //     }));
-// //   };
-
-//     const handleChange = (e) => {
-//         const {name, value, type, files} = e.target;
-
-//         const newValue = type === 'file' ? files[0] : value;
-
-//         setForm(prevForm => ({
-//             ...prevForm,
-//             [name]: newValue
-//         }))
-//     }
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-//         setError("");
-//         setLoading(true);
-
-//         try {
-//             const res = await client.post("user/register", {
-//                 fullName: form.fullName,
-//                 userName: form.userName,
-//                 email: form.email,
-//                 password: form.password,
-//                 mobileNumber: form.mobileNumber,
-//                 profilePicture: form.profilePicture
-
-//             });
-
-//             console.log("res:", res);
-
-//             onSuccess?.()
-            
-//         } catch (err) {
-//             console.log(err);
-            
-//         }
-//     }
-
-
-//     return(
-//         <div className="h-130 w-120 gap-5 " >
-//             <div>
-//                 <h1>Create your account</h1>
-//             </div>
-
-//             <form onSubmit={handleSubmit} className="flex" >
-//                 <div className="flex  flex-wrap">
-//                     <Input 
-//                         label="Full name"
-//                         name="full name"
-//                         type="text"
-//                         required={true}
-//                         onChange={handleChange}
-//                     />
-
-//                     <Input 
-//                         label="User name"
-//                         name="user name"
-//                         type="text"
-//                         required={true}
-//                         onChange={handleChange}
-//                     />
-
-
-//                     <Input 
-//                         label="Email"
-//                         name="email"
-//                         type="email"
-//                         required={true}
-//                         onChange={handleChange}
-//                     />
-
-//                     <Input 
-//                         label="Password"
-//                         name="password"
-//                         type="password"
-//                         required={true}
-//                         onChange={handleChange}
-//                     />
-
-//                     <Input 
-//                         label="Mobile number"
-//                         name="mobile number"
-//                         type="number"
-//                         onChange={handleChange}
-//                     />
-
-//                     <Input 
-//                         label="Profile picture"
-//                         name="profile picture"
-//                         type="file"
-//                         onChange={handleChange}
-//                     />
-
-//                 </div>
-//             </form>
-
-//             <Button text={loading ? "signing in..." : "Sign In" } styleType="special-btn" className="w-full h-12 mt-8 " type="submit" />
-//         </div>
-//     )
-// }
-
-// export default SignUp
-
-
 import React, { useState, useEffect, useRef } from "react";
 import Input from "../../Input/Input.jsx";
 import { client } from "../../../Api/client.js";
 import Button from "../../Button/Button.jsx";
 
 function SignUp({ onSuccess }) {
+  const [step, setStep] = useState("form");
+  const [otp, setOtp] = useState("");
+  const [emailForOtp, setEmailForOtp] = useState("");
+  const [timeLeft, setTimeLeft] = useState(120);
+  const [resending, setResending] = useState(false);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -156,13 +26,30 @@ function SignUp({ onSuccess }) {
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+  }, [step]);
+
+  useEffect(() => {
+    if (step !== "otp") return;
+    if (timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [step, timeLeft]);
+
+  const formatTime = () => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     setForm(prev => ({
       ...prev,
-      [name]: type === "file" ? files[0] : value
+      [name]: type === "file" ? files[0] : value,
     }));
   };
 
@@ -172,127 +59,183 @@ function SignUp({ onSuccess }) {
     setLoading(true);
 
     try {
-      // await client.post("/user/register", form);
-
       const formData = new FormData();
+      Object.keys(form).forEach(key => {
+        if (form[key]) formData.append(key, form[key]);
+      });
 
-      formData.append("fullName", form.fullName);
-      formData.append("userName", form.userName);
-      formData.append("email", form.email);
-      formData.append("password", form.password);
-      formData.append("mobileNumber", form.mobileNumber);
-      // formData.append("profilePicture", form.profilePicture)
+      const res = await client.post("/user/register", formData);
 
-      if(form.profilePicture) {
-        formData.append("profilePicture", form.profilePicture)
-      }
-
-      const res = await client.post("/user/register", form);
-
-      console.log("res:", res);
-      
-
-
-
-      onSuccess?.();
+      setEmailForOtp(res.data.email || form.email);
+      setTimeLeft(120);
+      setStep("otp");
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError(err?.response?.data?.message || "Signup failed");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleVerifyOtp = async () => {
+    setError("");
+    setLoading(true);
+
+    try {
+      await client.post("/user/verify-otp", {
+        email: emailForOtp,
+        otp,
+      });
+
+      onSuccess?.();
+    } catch (err) {
+      setError(err?.response?.data?.message || "Invalid OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setError("");
+    setResending(true);
+
+    try {
+      await client.post("/user/resend-otp", { email: emailForOtp });
+      setTimeLeft(120);
+    } catch {
+      setError("Failed to resend OTP");
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
     <div className="bg-white h-120 w-120 p-10 m-auto">
+      {step === "form" && (
+        <>
+          <div className="flex flex-col items-center">
+            <h2 className="font-bold text-2xl">Create your account</h2>
+            <p className="text-gray-400 mt-5">
+              Join MentorHub and start learning
+            </p>
+          </div>
 
-      {/* Header */}
-      <div className="flex flex-col items-center">
-        <h2 className="font-bold text-2xl">Create your account</h2>
-        <p className="text-gray-400 mt-5">
-          Join MentorHub and start learning
-        </p>
-      </div>
+          <form onSubmit={handleSubmit} className="mt-7">
+            <div className="grid grid-cols-2 gap-2 p-2">
+              <Input
+                label="Full Name"
+                name="fullName"
+                onChange={handleChange}
+                required
+                ref={inputRef}
+                className="h-8"
+              />
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="mt-7">
-        <div className="grid grid-cols-2 gap-2 p-2">
+              <Input
+                label="Username"
+                name="userName"
+                onChange={handleChange}
+                required
+                className="h-8"
+              />
+
+              <Input
+                label="Email"
+                type="email"
+                name="email"
+                onChange={handleChange}
+                required
+                className="h-8"
+              />
+
+              <Input
+                label="Mobile Number"
+                type="tel"
+                name="mobileNumber"
+                onChange={handleChange}
+                className="h-8"
+              />
+
+              <div className="col-span-2">
+                <Input
+                  label="Password"
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                  required
+                  className="h-8"
+                />
+              </div>
+
+              <div className="col-span-2">
+                <Input
+                  label="Profile Picture"
+                  type="file"
+                  name="profilePicture"
+                  onChange={handleChange}
+                  className="h-8"
+                />
+              </div>
+            </div>
+
+            {error && <p className="text-red-400 mt-2">{error}</p>}
+
+            <Button
+              text={loading ? "Sending OTP..." : "Create Account"}
+              styleType="special-btn"
+              className="w-full h-12 mt-5"
+              type="submit"
+            />
+          </form>
+        </>
+      )}
+
+      {step === "otp" && (
+        <div className="flex flex-col items-center gap-4 mt-10">
+          <h2 className="text-xl font-bold">Verify OTP</h2>
+
+          <p className="text-gray-500 text-sm text-center">
+            Enter the OTP sent to <br />
+            <span className="font-semibold">{emailForOtp}</span>
+          </p>
 
           <Input
-            label="Full Name"
-            name="fullName"
-            onChange={handleChange}
-            required
             ref={inputRef}
-            className="h-8"
+            label="OTP"
+            type="text"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            maxLength={6}
+            className="text-center tracking-widest"
           />
 
-          <Input
-            label="Username"
-            name="userName"
-            onChange={handleChange}
-            required
-            className="h-8"
-          />
+          {error && <p className="text-red-400">{error}</p>}
 
-          <Input
-            label="Email"
-            type="email"
-            name="email"
-            onChange={handleChange}
-            required
-            className="h-8"
-
-          />
-
-          <Input
-            label="Mobile Number"
-            type="tel"
-            name="mobileNumber"
-            onChange={handleChange}
-            className="h-8"
-
-          />
-
-          {/* Full width fields */}
-          <div className="col-span-2">
-            <Input
-              label="Password"
-              type="password"
-              name="password"
-              onChange={handleChange}
-              required
-            className="h-8"
-
-            />
+          <div className="text-sm text-gray-600">
+            {timeLeft > 0 ? (
+              <p>
+                Resend OTP in{" "}
+                <span className="font-semibold">{formatTime()}</span>
+              </p>
+            ) : (
+              <button
+                type="button"
+                onClick={handleResendOtp}
+                disabled={resending}
+                className="text-green-600 font-semibold hover:underline"
+              >
+                {resending ? "Resending..." : "Resend OTP"}
+              </button>
+            )}
           </div>
 
-          <div className="col-span-2">
-            <Input
-              label="Profile Picture"
-              type="file"
-              name="profilePicture"
-              onChange={handleChange}
-            className="h-8"
-
-            />
-          </div>
+          <Button
+            text={loading ? "Verifying..." : "Verify OTP"}
+            styleType="special-btn"
+            className="w-full h-12"
+            onClickHandler={handleVerifyOtp}
+          />
         </div>
-
-        {error && <p className="text-red-400 mt-2">{error}</p>}
-
-        <Button
-          text={loading ? "Creating account..." : "Sign Up"}
-          styleType="special-btn"
-          className="w-full h-12 mt-5"
-          type="submit"
-          
-        />
-      </form>
-
-      {/* <div className="mt-3 text-center">
-        <span className="text-gray-400">Already have an account?</span>{" "}
-        <span className="text-gray-600 cursor-pointer">Sign in</span>
-      </div> */}
+      )}
     </div>
   );
 }
