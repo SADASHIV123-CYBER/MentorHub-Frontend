@@ -1,18 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
-// import SignIn from "../Auth/SignIn/SignIn.js";
-// import {useModal} from "../../../context/ModalContext";
-import SignIn from "../SignIn/SignIn";
+import SignIn from "../../../pages/SignIn/SignIn.jsx";
+import SignUp from "../../../pages/SignUp/SignUp.jsx";
 import { ModalContext } from "../../../context/context";
-import SignUp from "../SignUp/SignUp";
 
 function LoginModal() {
 
-  const { closeLogin, view, setView } = useContext(ModalContext);
-  // const [view, setView] = useState('signIn');
-
-
-
+  const { closeLogin, view,  } = useContext(ModalContext);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center rounded-md ">
@@ -31,7 +25,7 @@ function LoginModal() {
 
         {view === 'signIn' ? <SignIn onSuccess={closeLogin} /> : <SignUp onSuccess={closeLogin} />}
 
-        {/* <SignIn onSuccess={closeLogin} /> */}
+
       </div>
     </div>
   );

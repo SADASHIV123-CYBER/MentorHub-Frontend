@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import  { useContext } from "react";
 import { useState } from "react"
-import Input from "../../Input/Input.jsx";
-import { client } from "../../../Api/client.js"
-import { AuthContext } from "../../../context/context.js";
+import Input from "../../components/Input/Input.jsx";
+import { client } from "../../Api/client.js"
+import { AuthContext } from "../../context/context.js";
 import { useNavigate } from "react-router-dom";
-import Button from "../../Button/Button.jsx";
+import Button from "../../components/Button/Button.jsx";
 
 
 function SignIn({onSuccess}) {
@@ -33,44 +33,80 @@ function SignIn({onSuccess}) {
         }
     },[])
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
-        setLoading(true);
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setError("");
+    //     setLoading(true);
 
-        try {
-            const loginRes = await client.post("/auth/login", {
-                email,
-                password
-            });
-            console.log("loginRes: ",loginRes.status, loginRes.data);
+    //     try {
+    //         const loginRes = await client.post("/auth/login", {
+    //             email,
+    //             password
+    //         });
+    //         console.log("loginRes: ",loginRes.status, loginRes.data);
 
-            const verifyRes = await client.get("/verify");
-            console.log("verifyRes:", verifyRes.status , verifyRes.data);
+    //         // const verifyRes = await client.get("/verify");
+    //         // console.log("verifyRes:", verifyRes.status , verifyRes.data);
 
-            // if(verifyRes?.data?.sucess && verifyRes.data.user) {
-            //     (verifyRes.data.user);
-            //     navigate("/");
-            //     return
-            // }
+    //         // if(verifyRes?.data?.sucess && verifyRes.data.user) {
+    //         //     (verifyRes.data.user);
+    //         //     navigate("/");
+    //         //     return
+    //         // }
 
-            setUser(loginRes.data.user);
-            onSuccess?.();
+    //         setUser(loginRes.user);
 
-            navigate("/")
-
-            setError(verifyRes?.data?.message || "Unable to verify user after login")
+    //         console.log(setUser);
             
-        } catch (err) {
-            console.error("Login flow error:", err?.response || err);
-            // const serverMsg = err?.response?.data?.message;
-            // if (serverMsg) setError(serverMsg);
-            if (err?.response?.status === 401) setError("Unauthorized — invalid credentials or token.");
-            else setError("Invalid email or password, Please check and try again.");
-            } finally {
-            setLoading(false);
-            }           
+    //         onSuccess?.();
+
+    //         navigate("/")
+
+    //         // setError(verifyRes?.data?.message || "Unable to verify user after login")
+            
+    //     } catch (err) {
+    //         console.error("Login flow error:", err?.response || err);
+    //         // const serverMsg = err?.response?.data?.message;
+    //         // if (serverMsg) setError(serverMsg);
+    //         if (err?.response?.status === 401) setError("Unauthorized — invalid credentials or token.");
+    //         else setError("Invalid email or password, Please check and try again.");
+    //         } finally {
+    //         setLoading(false);
+    //         }           
+    //     }
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+        // 1️⃣ Login → sets cookie
+        await client.post("/auth/login", { email, password });
+
+        // 2️⃣ Get logged-in user from cookie
+        const verifyRes = await client.get("/verify");
+
+        if (verifyRes?.data?.user) {
+        setUser(verifyRes.data.user);   // ✅ update context
+        onSuccess?.();
+        navigate("/");
+        return;
         }
+
+        setError("Unable to verify user after login");
+    } catch (err) {
+        console.error("Login flow error:", err?.response || err);
+
+        if (err?.response?.status === 401)
+        setError("Invalid email or password");
+        else
+        setError("Login failed. Please try again.");
+    } finally {
+        setLoading(false);
+    }
+    };
+
 
     
     return(

@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import logo from "../../assets/logo.png"
 import Button from "../Button/Button"
 import { Link } from "react-router-dom"
-import SignIn from "../Auth/SignIn/SignIn"
 // import { ModalContext } from "../../context/context"
 
 import { AuthContext, ModalContext } from "../../context/context"
@@ -15,7 +14,9 @@ function Navbar() {
     const {openLogin, setView} = useContext(ModalContext)
 
 
-    const {user} = useContext(AuthContext)
+    const {user} = useContext(AuthContext);
+    console.log(user);
+    
 
     
     return (
@@ -31,7 +32,21 @@ function Navbar() {
                 <span className=" text-[#5F6B64] cursor-pointer "> About</span>
             </div>
 
-            {user ? <div>hi</div> :  <div className="flex flex-row justify-between w-45">
+            {user ? ( 
+
+                user.profilePicture ? (
+                 <img src={user?.profilePicture} alt="profilePicture" className="h-12 w-12 rounded-full object-cover " /> 
+                    
+                ): (
+                    <div className="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center font-semibold text-lg " >
+                        {user.fullName?.charAt(0).toUpperCase()}
+                    </div>
+                )
+            ) : 
+            
+            
+            
+            <div className="flex flex-row justify-between w-45">
                 <div>
 
                     {/* <Link to="/signIn"> <Button  styleType="signIn" text={"Sign In"} onClickHandler={() => setLoginOpen(true)} /> </Link> */}

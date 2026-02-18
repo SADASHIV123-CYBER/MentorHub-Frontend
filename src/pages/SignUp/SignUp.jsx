@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import Input from "../../Input/Input.jsx";
-import { client } from "../../../Api/client.js";
-import Button from "../../Button/Button.jsx";
+import Input from "../../components/Input/Input.jsx";
+import { client } from "../../Api/client.js";
+import Button from "../../components/Button/Button.jsx";
 
 function SignUp({ onSuccess }) {
   const [step, setStep] = useState("form");
