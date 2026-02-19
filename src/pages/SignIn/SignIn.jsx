@@ -3,7 +3,7 @@ import  { useContext } from "react";
 import { useState } from "react"
 import Input from "../../components/Input/Input.jsx";
 import { client } from "../../Api/client.js"
-import { AuthContext } from "../../context/context.js";
+import { AuthContext, ModalContext } from "../../context/context.js";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button.jsx";
 
@@ -17,7 +17,8 @@ function SignIn({onSuccess}) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const {setUser} = useContext(AuthContext)
+    const {setUser} = useContext(AuthContext);
+    const {openLogin, setView} = useContext(ModalContext)
 
 
     // const handleChange = (e) => {
@@ -81,16 +82,28 @@ function SignIn({onSuccess}) {
     setLoading(true);
 
     try {
-        // 1️⃣ Login → sets cookie
         await client.post("/auth/login", { email, password });
 
-        // 2️⃣ Get logged-in user from cookie
         const verifyRes = await client.get("/verify");
 
+        console.log("User:----->", verifyRes);
+        
+
+        const role = verifyRes.data.user.role;
+
+
         if (verifyRes?.data?.user) {
-        setUser(verifyRes.data.user);   // ✅ update context
+        setUser(verifyRes.data.user);   
         onSuccess?.();
-        navigate("/");
+        navigate("/student");
+
+        if(role === 'User') {
+            navigate('/student')
+        } else if(role === 'Mentor') {
+            navigate('/mentor');
+        } else {
+            navigate('/admin')
+        }
         return;
         }
 
@@ -114,7 +127,7 @@ function SignIn({onSuccess}) {
         <div className="bg-white h-120 w-120 p-10 m-auto">
         
             <div className="flex flex-col items-center ">
-                <h2 className="font-bold text-3xl" >Sign in to mentorhub</h2>
+                <h2 className="font-bold text-3xl" >Sign in to mentorHub</h2>
                 <p className="text-gray-400 mt-5 ">Welcome back! Please sign in to continue</p>
             </div>
 
@@ -157,7 +170,19 @@ function SignIn({onSuccess}) {
 
             <div className=" mt-3 justify-center  ">
                 <span className="text-gray-400 ml-20">Don’t have an account?</span> {" "}
-                <span className="text-gray-600" > Sign up</span>
+                < button onClick={() => {
+                    openLogin();
+                    setView('signUp')
+                }} className=" cursor-pointer text-gray-700  hover:[transform:translateY(-0.5px)] " >
+                    SignUp
+                </button>
+            </div>
+
+            <div className="flex justify-center mt-4" >
+                <button onClick={() => {
+                    openLogin();
+                    setView('forgotPassword')
+                }} className="text-blue-500 hover:text-blue-700 hover:underline" >Forgot Password</button>
             </div>
         </div>
         

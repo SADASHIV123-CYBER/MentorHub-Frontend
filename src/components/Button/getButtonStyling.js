@@ -6,7 +6,7 @@ function getButtonStyling(styleType) {
     case "primary":
       return `${base} bg-blue-600 text-white shadow-sm hover:bg-blue-700`;
     case "secondary":
-      return `${base} bg-white border border-gray-300 text-gray-700 hover:bg-gray-50`;
+      return `${base} bg-white  text-gray-700 hover:bg-gray-50`;
     case "success":
       return `${base} bg-green-600 text-white shadow hover:bg-green-700`;
     case "warning":
