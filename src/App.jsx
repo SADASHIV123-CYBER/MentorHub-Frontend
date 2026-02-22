@@ -10,6 +10,7 @@ import Student from './pages/Student/Student.jsx'
 import Mentor from './pages/Mentor/Mentor.jsx'
 import RoleProtectedRoute from './components/Routes/RoleProtectedRoute.jsx'
 import Home from './pages/Home/Home.jsx'
+import CreateMentorProfile from './pages/Mentor/CreateMentorProfile.jsx'
 
 function App() {
 
@@ -43,6 +44,9 @@ function App() {
       <Route path='/mentor' element={<RoleProtectedRoute allowedRoles={["Mentor"]} >
         <Mentor />
       </RoleProtectedRoute>} />
+      
+
+      <Route path="/mentor/create-profile" element={<CreateMentorProfile />} />
     </Routes>
 
     {/* <SignIn /> */}

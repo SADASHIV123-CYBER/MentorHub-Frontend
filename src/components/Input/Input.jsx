@@ -15,7 +15,7 @@ function Input({
   return (
     <div className="flex flex-col group">
       {label && (
-        <label className="mb-1 font-medium text-black transition-all duration-200 group-focus-within:text-green-600">
+        <label className="mb-1 font-medium text-black transition-all duration-200 group-focus-within:text-blue-600">
           {label}
         </label>
       )}
@@ -39,7 +39,7 @@ function Input({
           hover:border-green-500 hover:shadow-md
 
           focus:border-green-600
-          focus:ring-2 focus:ring-green-200
+          focus:ring-2 focus:ring-blue-200
           focus:shadow-lg
           focus:scale-[1.02]
 

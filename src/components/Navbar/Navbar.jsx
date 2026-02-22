@@ -48,7 +48,7 @@ function Navbar() {
       
     </Link>
 
-      <div className="hidden md:flex items-center gap-10 text-[#5F6B64] font-medium">
+      <div className="hidden md:flex items-center gap-10 text-[#333333] font-medium">
         <span className="cursor-pointer hover:text-black transition">Mentors</span>
         <span className="cursor-pointer hover:text-black transition">How it Works</span>
         <span className="cursor-pointer hover:text-black transition">Pricing</span>

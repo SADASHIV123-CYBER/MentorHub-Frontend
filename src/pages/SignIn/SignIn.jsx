@@ -97,10 +97,16 @@ function SignIn({onSuccess}) {
         onSuccess?.();
         navigate("/student");
 
-        if(role === 'User') {
+        if(role === 'Student') {
             navigate('/student')
         } else if(role === 'Mentor') {
-            navigate('/mentor');
+
+            try {
+                await client.get('mentor/me');
+                navigate('/mentor');
+            } catch(err) {
+                navigate('/mentor/create-profile')
+            }
         } else {
             navigate('/admin')
         }
