@@ -18,9 +18,13 @@ function getButtonStyling(styleType) {
     case "disabled":
       return `${base} bg-gray-200 text-gray-500 cursor-not-allowed opacity-70`;
       case "signIn":
-        return `px-4 py-2 font-medium rounded-4xl transition duration-200  bg-[#E5EEE8] text-[#2DA58D] hover:bg-[#F0F5F2] cursor-pointer `
+        return `${base} rounded-4xl transition duration-300   text-white bg-[#001a33] hover:bg-[#2DA58D] cursor-pointer `
       case "special-btn":
-        return `px-4 py-2 font-medium rounded-4xl transition duration-200 bg-[#2DA58D] text-white  transition-all duration-150 hover:-translate-y-px cursor-pointer`
+        return `${base} rounded-4xl transition duration-200 bg-[#2DA58D] hover:bg-[#5AC3AE] text-white  transition-all duration-150 hover:-translate-y-px cursor-pointer`
+      case "btn-1":
+        return `${base} rounded-4x1 transition duration-2 bg-[#2DA58D] hover:bg-[#5AC3AE] text-black cursor-pointer `
+      case "btn-2":
+        return `${base} rounded-4x1 transition duration-2 bg-[#001a33] hover:bg-[#5AC3AE] text-white hover:text-black cursor-pointer `
     default:
       return `${base} bg-gray-100 text-black hover:bg-gray-200`;
   }

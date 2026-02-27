@@ -37,7 +37,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="h-24 px-8 w-full bg-white mt-5 rounded-md flex items-center justify-between shadow-sm">
+    <nav className="h-24 px-8 w-full bg-[#001a33] mt-5 rounded-md flex items-center justify-between shadow-sm">
 
     <Link to="/" >
       
@@ -48,11 +48,11 @@ function Navbar() {
       
     </Link>
 
-      <div className="hidden md:flex items-center gap-10 text-[#333333] font-medium">
-        <span className="cursor-pointer hover:text-black transition">Mentors</span>
-        <span className="cursor-pointer hover:text-black transition">How it Works</span>
-        <span className="cursor-pointer hover:text-black transition">Pricing</span>
-        <span className="cursor-pointer hover:text-black transition">About</span>
+      <div className="hidden md:flex items-center gap-10 text-[#87b1d3] font-medium">
+        <span className="cursor-pointer hover:text-white transition">Mentors</span>
+        <span className="cursor-pointer hover:text-white transition">How it Works</span>
+        <span className="cursor-pointer hover:text-white transition">Pricing</span>
+        <span className="cursor-pointer hover:text-white transition">About</span>
       </div>
 
       {user ? (

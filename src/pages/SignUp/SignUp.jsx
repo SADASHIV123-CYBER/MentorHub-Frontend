@@ -16,7 +16,7 @@ function SignUp({ onSuccess }) {
     email: "",
     password: "",
     mobileNumber: "",
-    profilePicture: null,
+    profilePicture: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -51,6 +51,11 @@ function SignUp({ onSuccess }) {
       ...prev,
       [name]: type === "file" ? files[0] : value,
     }));
+
+    if(type === "file") {
+      console.log("selected file:", files[0]);
+      
+    }
   };
 
   const handleSubmit = async (e) => {

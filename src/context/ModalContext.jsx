@@ -5,7 +5,7 @@ import { ModalContext } from "./context";
 
 
 
-export const ModalProvider = ({ children }) => {
+function ModalProvider  ({ children })  {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const [view, setView] = useState('signIn')
@@ -23,4 +23,6 @@ export const ModalProvider = ({ children }) => {
     </ModalContext.Provider>
   );
 };
+
+export default ModalProvider
 

@@ -4,7 +4,7 @@ import { client } from "../api/client";
 import { AuthContext } from "./context";
 
 
-export default function AuthProvider({ children }) {
+export const AuthProvider  =  ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
