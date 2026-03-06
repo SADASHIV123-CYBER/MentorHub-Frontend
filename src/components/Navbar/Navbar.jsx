@@ -49,9 +49,20 @@ function Navbar() {
     </Link>
 
       <div className="hidden md:flex items-center gap-10 text-[#87b1d3] font-medium">
-        <span className="cursor-pointer hover:text-white transition">Mentors</span>
-        <span className="cursor-pointer hover:text-white transition">How it Works</span>
-        <span className="cursor-pointer hover:text-white transition">Pricing</span>
+        <span className="cursor-pointer hover:text-white transition" onClick={() => {
+          const section = document.getElementById("features");
+          section?.scrollIntoView({behavior: "smooth"})
+        }} >Features</span>
+
+        
+        <span className="cursor-pointer hover:text-white transition" onClick={() => {
+          const section = document.getElementById("how-it-works");
+          section?.scrollIntoView({ behavior: "smooth" });
+          }} >How it Works</span>
+        <span className="cursor-pointer hover:text-white transition" onClick={() => {
+          const section = document.getElementById("pricing");
+          section?.scrollIntoView({behavior: "smooth"})
+        }} >Pricing</span>
         <span className="cursor-pointer hover:text-white transition">About</span>
       </div>
 

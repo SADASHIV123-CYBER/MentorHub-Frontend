@@ -1,0 +1,67 @@
+const plans = [
+  {
+    name: "Explorer",
+    tag: "Free",
+    price: "$0",
+    duration: "forever",
+    desc: "Best for students getting started.",
+    features: [
+      "Access to self-guided resources and toolkits",
+      "Community posts and discussions",
+      "Invitations to selected group webinars",
+      "Mobile-friendly platform",
+    ],
+    button: "Get Started Free",
+    popular: false,
+  },
+  {
+    name: "Guided",
+    tag: "Pro",
+    price: "$50",
+    duration: "/mo",
+    yearly: "or $500/year",
+    desc: "For students and young graduates who want structured support.",
+    features: [
+      "Everything in Free, plus:",
+      "4 one-on-one mentorship sessions/month",
+      "Session scheduling and reminders",
+      "Goal-setting and progress tracking",
+      "Access to premium group workshops",
+    ],
+    button: "Upgrade to Pro",
+    popular: true,
+  },
+  {
+    name: "Fellowship",
+    tag: "Personalized Guidance",
+    price: "$1,000",
+    duration: "/year",
+    desc: "For mentees seeking long-term individualized support.",
+    features: [
+      "Everything in Pro, plus:",
+      "Dedicated mentor access for 12 months",
+      "Monthly personalized development plan",
+      "Priority scheduling",
+      "Email or chat support",
+    ],
+    button: "Personalized Guidance",
+    popular: false,
+  },
+  {
+    name: "Institutional",
+    tag: "Schools & Organizations",
+    price: "Custom",
+    desc: "For organizations running mentorship at scale.",
+    features: [
+      "Cohort-based mentorship programs",
+      "Branded program space",
+      "Admin dashboard and reporting",
+      "Staff onboarding and training",
+      "Impact summaries",
+    ],
+    button: "Contact Us",
+    popular: false,
+  },
+];
+
+export default plans
