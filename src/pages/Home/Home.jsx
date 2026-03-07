@@ -1,19 +1,45 @@
-import React from "react"
+import React, { useContext } from "react"
 import Button from "../../components/Button/Button"
 import Slider from "../../components/Slider/Slider"
 import HowItWorks from "../../components/HowItWorks/HowItWorks"
 import Pricing from "../../components/Pricing/Pricing"
+import About from "../../components/About/About"
+import Footer from "../../components/Footer/Footer"
+import Mentors from "../../components/Mentor/Mentor"
+import { AuthContext } from "../../context/context"
+import { ModalContext } from "../../context/context"
+import { Navigate } from "react-router-dom"
+
 
 function Home() {
+
+  const {user} = useContext(AuthContext);
+  const {openLogin, setView} = useContext(ModalContext);
+
+  const getStartHandle = () => {
+    openLogin()
+    setView("signIn")
+  }
+
+  if(user) {
+    if(user.role === "Student") {
+      return <Navigate to="/Student" replace />
+    } else if(user.role === "Mentor") {
+      return <Navigate to="/Mentor" replace /> 
+    } else {
+      return <Navigate to="/Admin" replace /> 
+    }
+
+  }
   return(
-    <main>
+    <main id="home">
       <div className="relative flex flex-col min-h-[80vh] items-center justify-center overflow-hidden px-4 text-center " >
         <h1 className="mb-6 text-4xl text-white font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl w-180 " > Unlock Your Future with the Right Mentor </h1>
 
         <p className="text-[#87b1d3] mx-auto mb-8 max-w-xl text-lg text-muted-foreground ">Discover opportunities, get expert help with essays and learning, and connect with mentors for 1-on-1 sessions. </p>
 
         <div >
-          <Button styleType="btn-1" text="Get Start" className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8 text-base" />
+          <Button styleType="btn-1" onClickHandler={getStartHandle} text="Get Start" className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8 text-base" />
         </div>
       </div>
 
@@ -122,8 +148,16 @@ function Home() {
 
       <HowItWorks />
 
+      <Mentors />
+
 
       <Pricing />
+
+      <About />
+
+      <Footer />
+
+
     </main>
 
     

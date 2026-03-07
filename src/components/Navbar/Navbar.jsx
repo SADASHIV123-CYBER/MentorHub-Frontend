@@ -60,10 +60,18 @@ function Navbar() {
           section?.scrollIntoView({ behavior: "smooth" });
           }} >How it Works</span>
         <span className="cursor-pointer hover:text-white transition" onClick={() => {
+          const section = document.getElementById("mentors");
+          section?.scrollIntoView({behavior: "smooth"})
+        }} >Mentors</span>
+
+        <span className="cursor-pointer hover:text-white transition" onClick={() => {
           const section = document.getElementById("pricing");
           section?.scrollIntoView({behavior: "smooth"})
-        }} >Pricing</span>
-        <span className="cursor-pointer hover:text-white transition">About</span>
+        }} > Pricing </span>
+        <span className="cursor-pointer hover:text-white transition" onClick={() => {
+          const section = document.getElementById("about");
+          section?.scrollIntoView({behavior: "smooth"})
+        }} >About</span>
       </div>
 
       {user ? (
